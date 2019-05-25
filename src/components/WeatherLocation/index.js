@@ -9,7 +9,7 @@ import {
   SUN, 
   //RAIN, 
   //SNOW, 
-  WINDY 
+  //WINDY 
 
 } from '../../constants/weathers';
 
@@ -27,13 +27,6 @@ const data = {
   wind: '10 m/s'
 }
 
-const data2 = {
-  temperature: 7,
-  weatherState: WINDY,
-  humidity: 20,
-  wind: '15 m/s'
-}
-
 class WeatherLocation extends Component {
 
   constructor() {
@@ -44,12 +37,43 @@ class WeatherLocation extends Component {
     };
   }
 
+  getWeatherState = weather_data => {
+    return SUN;
+  };
+
+  // con getData obtenemos los datos que nos interesan de la peticion a la API en el formato que necesitemos
+  getData = weather_data => {
+    const { humidity, temp } = weather_data.main;
+    const { speed } = weather_data.wind;
+    const weatherState = this.getWeatherState(weather_data);
+
+    const data = {
+      humidity,
+      temperature: temp,
+      weatherState,
+      wind: `${speed} m/s`
+    };
+
+    return data;
+  };
+
   handleUpdateClick = () => {
+
     //usamos fetch para la llamada a la API
-    fetch(api_weather);
-    console.log("actualizado")
-    this.setState({
-      data : data2
+    fetch(api_weather).then( resolve => {
+
+      return resolve.json();
+
+    }).then(data => {
+      const newWeather = this.getData(data);
+      console.log(newWeather);
+      debugger;
+      this.setState({
+        data: newWeather
+      })
+
+      console.log(data);
+      debugger;
     });
   };
 
