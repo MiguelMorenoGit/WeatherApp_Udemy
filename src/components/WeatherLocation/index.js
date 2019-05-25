@@ -1,27 +1,12 @@
 import React, { Component } from 'react';
+import CircularProgress from '@material-ui/core/CircularProgress'
 import transformWeather from '../../services/transformWeather';
 // se usan las llaves cuando el exportar no se utiliza la palabra default
 import { api_weather} from '../../constants/api_url'
 import Location from './Location';
 import WeatherData from './WeatherData';
 import './styles.css';
-import { 
 
-  //CLOUD, 
-  //CLOUDY, 
-  SUN, 
-  //RAIN, 
-  //SNOW, 
-  //WINDY 
-
-} from '../../constants/weathers';
-
-const data = {
-  temperature: 5,
-  weatherState: SUN,
-  humidity: 10,
-  wind: '10 m/s'
-}
 
 class WeatherLocation extends Component {
 
@@ -29,18 +14,20 @@ class WeatherLocation extends Component {
     super();
     this.state = {
       city:"Barcelona",
-      data: data
+      data: null
     };
     console.log("constructor")
   }
 
   componentDidMount() {
     console.log("componentDidMount")
+    this.handleUpdateClick();
     
   };
 
   componentDidUpdate(prevProps, prevState) {
     console.log("componentDidUpdate")
+    
 
   };
 
@@ -48,15 +35,14 @@ class WeatherLocation extends Component {
   componentWillMount() {
     console.log("UNSAFE componentWillMount")
     
+    
+    
   };
 
   componentWillUpdate(nextProps, nextState) {
     console.log("UNSAFE componentWillUpdate")
     
   }
-  
-  
-  
   
 
   handleUpdateClick = () => {
@@ -66,7 +52,9 @@ class WeatherLocation extends Component {
       return resolve.json();
 
     }).then(data => {
+      console.log("resultado de handleUpdateClick")
       const newWeather = transformWeather(data);
+      console.log(newWeather);
       
       this.setState({
         data: newWeather
@@ -81,8 +69,10 @@ class WeatherLocation extends Component {
     return (
       <div className="weatherLocationCont">
         <Location city={city}/>
-        <WeatherData data={data}/>
-        <button onClick={this.handleUpdateClick} >Actualizar</button>
+        { data ? 
+          <WeatherData data={data}/> : 
+          <CircularProgress size={50}/> 
+        }
       </div>
     );
   }
