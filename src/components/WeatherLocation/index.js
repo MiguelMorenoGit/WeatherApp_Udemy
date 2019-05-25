@@ -1,4 +1,7 @@
 import React, { Component } from 'react';
+import transformWeather from '../../services/transformWeather';
+// se usan las llaves cuando el exportar no se utiliza la palabra default
+import { api_weather} from '../../constants/api_url'
 import Location from './Location';
 import WeatherData from './WeatherData';
 import './styles.css';
@@ -12,13 +15,6 @@ import {
   //WINDY 
 
 } from '../../constants/weathers';
-
-// configuramos la llamada a la API
-const location = "Barcelona,es";
-const api_key = "9c03d119998f2db75cfceb64fdcf3983";
-const url_base_weather = "https://api.openweathermap.org/data/2.5/weather"
-
-const api_weather = `${url_base_weather}?q=${location}&appid=${api_key}`;
 
 const data = {
   temperature: 5,
@@ -35,49 +31,52 @@ class WeatherLocation extends Component {
       city:"Barcelona",
       data: data
     };
+    console.log("constructor")
   }
 
-  getWeatherState = weather_data => {
-    return SUN;
+  componentDidMount() {
+    console.log("componentDidMount")
+    
   };
 
-  // con getData obtenemos los datos que nos interesan de la peticion a la API en el formato que necesitemos
-  getData = weather_data => {
-    const { humidity, temp } = weather_data.main;
-    const { speed } = weather_data.wind;
-    const weatherState = this.getWeatherState(weather_data);
+  componentDidUpdate(prevProps, prevState) {
+    console.log("componentDidUpdate")
 
-    const data = {
-      humidity,
-      temperature: temp,
-      weatherState,
-      wind: `${speed} m/s`
-    };
-
-    return data;
   };
+
+  // los siguientes metodos de "lifecicle" estan en deprecated y no se aconsejan usar, pero podemos encontrarlos en cualquier proyecto anterior al cambio
+  componentWillMount() {
+    console.log("UNSAFE componentWillMount")
+    
+  };
+
+  componentWillUpdate(nextProps, nextState) {
+    console.log("UNSAFE componentWillUpdate")
+    
+  }
+  
+  
+  
+  
 
   handleUpdateClick = () => {
-
     //usamos fetch para la llamada a la API
     fetch(api_weather).then( resolve => {
 
       return resolve.json();
 
     }).then(data => {
-      const newWeather = this.getData(data);
-      console.log(newWeather);
-      debugger;
+      const newWeather = transformWeather(data);
+      
       this.setState({
         data: newWeather
       })
 
-      console.log(data);
-      debugger;
     });
   };
 
   render() {
+    console.log("render")
     const { city, data } = this.state
     return (
       <div className="weatherLocationCont">
@@ -88,7 +87,6 @@ class WeatherLocation extends Component {
     );
   }
 };
-
 
 
 export default WeatherLocation;
