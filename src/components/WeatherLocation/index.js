@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
-import CircularProgress from '@material-ui/core/CircularProgress'
+import CircularProgress from '@material-ui/core/CircularProgress';
+import { PropTypes } from 'prop-types';
+import getUrlWeatherByCity from '../../services/getUrlWeatherByCity';
 import transformWeather from '../../services/transformWeather';
-// se usan las llaves cuando el exportar no se utiliza la palabra default
-import { api_weather} from '../../constants/api_url'
 import Location from './Location';
 import WeatherData from './WeatherData';
 import './styles.css';
@@ -10,10 +10,12 @@ import './styles.css';
 
 class WeatherLocation extends Component {
 
-  constructor() {
-    super();
+  constructor(props) {
+    super(props);
+    const { city } = props;
+
     this.state = {
-      city:"Barcelona",
+      city,
       data: null
     };
     console.log("constructor")
@@ -31,28 +33,26 @@ class WeatherLocation extends Component {
 
   };
 
-  // los siguientes metodos de "lifecicle" estan en deprecated y no se aconsejan usar, pero podemos encontrarlos en cualquier proyecto anterior al cambio
-  componentWillMount() {
-    console.log("UNSAFE componentWillMount")
-    
-    
-    
-  };
+  // // los siguientes metodos de "lifecicle" estan en deprecated y no se aconsejan usar, pero podemos encontrarlos en cualquier proyecto anterior al cambio
+  // componentWillMount() {
+  //   console.log("UNSAFE componentWillMount")
+  // };
 
-  componentWillUpdate(nextProps, nextState) {
-    console.log("UNSAFE componentWillUpdate")
-    
-  }
+  // componentWillUpdate(nextProps, nextState) {
+  //   console.log("UNSAFE componentWillUpdate")
+  // }
   
 
   handleUpdateClick = () => {
-    //usamos fetch para la llamada a la API
+    //usamos fetch para la llamada a la APIç
+    const api_weather = getUrlWeatherByCity(this.state.city);
     fetch(api_weather).then( resolve => {
 
+      
       return resolve.json();
 
     }).then(data => {
-      console.log("resultado de handleUpdateClick")
+      console.log("resultado de handleUpdateClick",data)
       const newWeather = transformWeather(data);
       console.log(newWeather);
       
@@ -78,5 +78,8 @@ class WeatherLocation extends Component {
   }
 };
 
+WeatherLocation.propTypes = {
+  city: PropTypes.string.isRequired,
+}
 
 export default WeatherLocation;
