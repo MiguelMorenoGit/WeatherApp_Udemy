@@ -20,6 +20,7 @@ const getWeatherState = weather => {
 
 // con getData obtenemos los datos que nos interesan de la peticion a la API en el formato que necesitemos
 const transformWeather = weather_data => {
+  const { id } = weather_data;
   const { humidity, temp } = weather_data.main;
   const { speed } = weather_data.wind;
   // le pasamos .weather[0] que es quien contiene el codigo del clima
@@ -27,6 +28,7 @@ const transformWeather = weather_data => {
   const temperature = getTemp(temp)
 
   const data = {
+    id,
     humidity,
     temperature,
     weatherState,
