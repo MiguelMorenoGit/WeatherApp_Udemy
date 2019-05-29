@@ -1,0 +1,16 @@
+
+.locationList{
+    
+  max-height: 90vh;
+  overflow: auto;
+  margin: 10px 0 0 0;
+  
+}
+@media (max-width: 64em) {
+  .locationList{
+    
+    max-height: 50vh;
+    overflow: auto;
+    margin-bottom: 20px;
+  }
+}
