@@ -30,10 +30,21 @@ class ForecastExtended extends Component {
   }
 
   componentDidMount() {
-    //fetch or axios
+    this.updateCity(this.props.city)
+  }
+
+  componentWillReceiveProps(nextProps) {
+    if(nextProps.city !== this.props.city) {
+      this.setState({ forecast:null })
+      this.updateCity(nextProps.city)
+    }
+  }
+
+  updateCity = city => {
+      //fetch or axios
     //API call:
     //api.openweathermap.org/data/2.5/forecast?q={city name},{country code}&appid={userApiKey}
-    const url_forecast = `${url_base_forecast}?q=${this.props.city}&appid=${api_key}`;
+    const url_forecast = `${url_base_forecast}?q=${city}&appid=${api_key}`;
 
     fetch(url_forecast).then(
       data => (data.json())
@@ -47,9 +58,14 @@ class ForecastExtended extends Component {
     );
   }
 
-  renderForecastItemDays() {
-    return <h3>Render Items</h3>
-    //return days.map(day=> <ForecastItem key={day} weekDay={day} hour={10} data={data} />)
+  renderForecastItemDays(forecastData) {
+    return forecastData.map(forecast => (
+      <ForecastItem 
+            key={`${forecast.weekDay}${forecast.hour}`} 
+            weekDay={forecast.weekDay} 
+            hour={forecast.hour} 
+            data={forecast.data} />
+    )); 
   }
 
   renderProgress() {
@@ -65,7 +81,7 @@ class ForecastExtended extends Component {
       <div className= 'forecast-title'>
         <h2>{`Pronóstico extendido para ${city}`}</h2>
         { forecastData ?
-             this.renderForecastItemDays()
+             this.renderForecastItemDays(forecastData)
              : this.renderProgress()
         }
       </div>
