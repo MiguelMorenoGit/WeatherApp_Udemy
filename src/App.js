@@ -36,8 +36,8 @@ class App extends Component {
     return (
       <Grid>
         <Row>
-          <AppBar position='sticky' >
-            <Toolbar>
+          <AppBar position='sticky'>
+            <Toolbar className='bar-container'>
               <Typography varianty='title' color='inherit'>
                 Weather App
               </Typography>

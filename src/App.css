@@ -2,6 +2,10 @@
   text-align: center;
 }
 
+.bar-container{
+  background: rgb(104, 215, 223);
+}
+
 .App-logo {
   animation: App-logo-spin infinite 20s linear;
   height: 80px;
